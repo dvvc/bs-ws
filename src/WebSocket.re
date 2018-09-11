@@ -1,5 +1,8 @@
 type t;
 
+[@bs.deriving abstract]
+type message = {data: string};
+
 type event = [
   | `close((int, string) => unit) 
   | `message(string => unit)
@@ -29,7 +32,7 @@ let string_of_readyState = (readyState) =>
 
 [@bs.send] external on: (t, [@bs.string] [
     | `close((int, string) => unit) 
-    | `message(string => unit)
+    | `message(message => unit)
     | [@bs.as "open"] `open_(unit => unit)
     | `ping(Node.Buffer.t => unit)
     | `pong(Node.Buffer.t => unit)
@@ -37,3 +40,4 @@ let string_of_readyState = (readyState) =>
 ]) => t = "addEventListener";
 
 [@bs.send] external send: (t, string) => unit = "";
+[@bs.send] external close: t => unit = "";
